@@ -7,7 +7,24 @@ const getRandomPositiveInteger = (a, b) => {
   const result = Math.random() * (upper - lower + 1) + lower;
 
   return Math.floor(result);
-};
+}
+
+// Функция - генератор для получения уникальных идентификаторов из указанного диапазона, и так, чтобы они не повторялись
+function createRandomFromRangeGenerator (a, b) {
+  const previousValues = [];
+
+  return function () {
+    let currentValue = getRandomPositiveInteger(a, b);
+    if (previousValues.length >= (b - a + 1)) {
+      return null;
+    }
+    while (previousValues.includes(currentValue)) {
+      currentValue = getRandomPositiveInteger(a, b);
+    }
+    previousValues.push(currentValue);
+    return currentValue;
+  };
+}
 
 // Функция для проверки максимальной длины строки
 const checkStringLength = (string, length) => {
@@ -19,7 +36,36 @@ const getRandomArrayElement = (elements) => {
   return elements[getRandomPositiveInteger(0, elements.length - 1)];
 };
 
-const PHOTOS_DESCRIPTIONS_COUNT = 25;
+const OBJECT_COUNT = 25;
+
+// Описания фотографий
+const DESCRIPTION = [
+  'Кот, который гуляет сам по себе',
+  'Хочу в туалет',
+  'Ем мышь',
+  'Сейчас получу люлей',
+  'Хозяин погладил',
+  'Хочу спать',
+  'Выгнали на улицу',
+  'Не хочу быть кошкой',
+  'Хочу быть псом',
+  'Не хочу гулять',
+  'Ням-ням',
+  'Ничего не понимаю',
+  'Как это сделать?',
+  'Ой, всё!',
+  'Я устал!',
+  'И чО?',
+  'Мур-мур',
+  'Наконец-то весна!',
+  'Хочу котят',
+  'Хватит меня фоткать',
+  'Как надоела жара',
+  'Дай пожрать',
+  'Хочу в деревню',
+  'Кошачий день',
+  'Ну вот и всё',
+];
 
 const COMMENT = [
   'Всё отлично!',
@@ -58,21 +104,31 @@ const NAMES = [
   'Эжен',
 ];
 
+// В переменных - записана функция генератор, возвращающая случайное не повторяющееся число
+const generatePhotoId = createRandomFromRangeGenerator(0, OBJECT_COUNT);
+const generatePhotoUrl = createRandomFromRangeGenerator(1, OBJECT_COUNT);
+const generateCommentsId = createRandomFromRangeGenerator(1, 135);
+
+// Функция создания объекта
 const createUser = () => {
   return {
-    id: getRandomPositiveInteger(1, 25),
-    url: `photos/${getRandomPositiveInteger(1, 25)}`,
-    //avatar: `img/avatar-${getRandomPositiveInteger(1, 25)}.svg`,
-    description: '',
+    id: `${generatePhotoId()}`,
+    url: `photos/${generatePhotoUrl()}.jpg`,
+    description: getRandomArrayElement(DESCRIPTION),
     likes: getRandomPositiveInteger(15, 200),
-    message: getRandomArrayElement(COMMENT),
-    name: getRandomArrayElement(NAMES),
+    comments: [
+      {
+        id: generateCommentsId(),
+        avatar: `img/avatar-${getRandomPositiveInteger(1, 6)}.svg`,
+        message: getRandomArrayElement(COMMENT),
+        name: getRandomArrayElement(NAMES),
+      }
+    ],
   };
 };
 
+// Массив для хранения созданных 25 объектов
 const photosDescriptions = Array.from(
-  { length: PHOTOS_DESCRIPTIONS_COUNT },
+  { length: OBJECT_COUNT },
   createUser
 );
-
-console.log(photosDescriptions);
