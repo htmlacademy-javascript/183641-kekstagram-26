@@ -7,7 +7,7 @@ const getRandomPositiveInteger = (a, b) => {
   const result = Math.random() * (upper - lower + 1) + lower;
 
   return Math.floor(result);
-}
+};
 
 // Функция - генератор для получения уникальных идентификаторов из указанного диапазона, и так, чтобы они не повторялись
 function createRandomFromRangeGenerator (a, b) {
@@ -24,12 +24,12 @@ function createRandomFromRangeGenerator (a, b) {
     previousValues.push(currentValue);
     return currentValue;
   };
-}
+};
 
 // Функция для проверки максимальной длины строки
-const checkStringLength = (string, length) => {
-  return string.length <= length;
-};
+// const checkStringLength = (string, length) => {
+//   return string.length <= length;
+// };
 
 // Функция поиска случайного элемента в переданном массиве
 const getRandomArrayElement = (elements) => {
